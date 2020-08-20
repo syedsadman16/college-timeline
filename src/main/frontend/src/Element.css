@@ -1,0 +1,19 @@
+.activity-div {
+    background-color: blueviolet;
+    padding: 3px;
+    padding-left: 20px;
+    margin: 5px;
+    border-radius: 5%;
+    text-align: left;
+    font-size: small;
+}
+
+.heading {
+    display: inline-block;
+    padding-left: 2px;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 50px;
+    padding-right: 2px;;
+    border-color: black;
+}
