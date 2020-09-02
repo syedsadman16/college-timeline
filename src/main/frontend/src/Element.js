@@ -1,10 +1,10 @@
 import React from "react";
 import "./Element.css";
 
-function Element({ name, section }) {
+function Element({ name, section, color }) {
   return (
     <div>
-      <div className="activity-div">
+      <div className="activity-div" style={{backgroundColor: color}}>
         <div className="heading">
           <h2> {section} </h2>
         </div>
