@@ -1,33 +1,40 @@
 package com.example.curriculumtimeline.rest;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 @Service // Marks as buisness service 
 public class CourseService {
-    ArrayList<Courses> course_list = new ArrayList<>();
 
-    public ArrayList<Courses> viewAllCourses(){
-        return course_list;
+    @Autowired
+    private ClassesRepository classesRepository;
+   // ArrayList<Courses> course_list = new ArrayList<>();
+
+    public List<Courses> viewAllCourses(){
+        return classesRepository.findAll();
     }
 
     public void addCourse(Courses course){
-        course_list.add(course);
+        classesRepository.save(course);
     }
 
     public void edit(Courses course, String id){
-        for(int i=0; i<course_list.size(); i++){
-            if(course_list.get(i).getID().equals(id)){
-                course_list.set(i, course);
-                return; 
-            }
-        }
+        Courses updateCourse = classesRepository.findById(id).orElseThrow();
+        updateCourse = course;
+        classesRepository.save(updateCourse);
+        // updateCourse.setCourseNumber(course.getCourseNumber());
+        // updateCourse.setCredits(course.getCredits());
+        // updateCourse.setID(course.getID());
+        // updateCourse.setName(name);
     }
 
     public void delete(Courses course, String id){
-        course_list.removeIf(x -> x.getID().equals(id));
+        Courses deleteCourse = classesRepository.findById(id).orElseThrow();
+        classesRepository.delete(deleteCourse);
     }
 
 }

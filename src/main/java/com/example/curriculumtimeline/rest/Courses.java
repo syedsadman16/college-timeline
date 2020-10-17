@@ -1,7 +1,12 @@
 package com.example.curriculumtimeline.rest;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Courses {
 
+    @Id
     private String ID;
     private String subject;
     private int courseNumber;

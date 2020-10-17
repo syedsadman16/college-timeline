@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -17,7 +18,7 @@ public class CourseController {
     private CourseService service; // Creates an instance of the service
     
     @RequestMapping("/")
-    public ArrayList<Courses> getCourses(){
+    public List<Courses> getCourses(){
         return service.viewAllCourses();
     } 
 
