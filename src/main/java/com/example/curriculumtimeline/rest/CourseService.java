@@ -2,6 +2,7 @@ package com.example.curriculumtimeline.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,15 @@ public class CourseService {
 
     @Autowired
     private ClassesRepository classesRepository;
-   // ArrayList<Courses> course_list = new ArrayList<>();
+   ArrayList<Map<String, List<Courses>>> course_list = new ArrayList<>();
+
+    public void addTest(Map<String, List<Courses>> courses) {
+        course_list.add(courses);
+    }
+
+    public ArrayList<Map<String, List<Courses>>> getTest() {
+        return course_list;
+    }
 
     public List<Courses> viewAllCourses(){
         return classesRepository.findAll();
@@ -26,10 +35,6 @@ public class CourseService {
         Courses updateCourse = classesRepository.findById(id).orElseThrow();
         updateCourse = course;
         classesRepository.save(updateCourse);
-        // updateCourse.setCourseNumber(course.getCourseNumber());
-        // updateCourse.setCredits(course.getCredits());
-        // updateCourse.setID(course.getID());
-        // updateCourse.setName(name);
     }
 
     public void delete(Courses course, String id){

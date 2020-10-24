@@ -1,5 +1,7 @@
 package com.example.curriculumtimeline.rest;
 
+import javax.annotation.Generated;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,17 +16,16 @@ public class Courses {
     private int credits;
     private String semester;
 
-    public Courses() {
+    public Courses() { }
 
-    }
-
-    public Courses(String id, String sub, int num, String name, int cr){
+    public Courses(String id, String sub, int num, String name, int cr, String sem){
         super();
         this.subject = sub;
         this.ID = id;
         this.courseNumber = num;
         this.name = name;
         this.credits = cr;
+        this.semester = sem;
     }
 
     public String getSubject() {
