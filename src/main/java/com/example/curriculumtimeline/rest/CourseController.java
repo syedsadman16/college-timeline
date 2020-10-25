@@ -23,23 +23,6 @@ public class CourseController {
     */
     @Autowired
     private CourseService service;
-//
-//    @RequestMapping("/")
-//    public List<Courses> getCourses(){
-//        return service.viewAllCourses();
-//    }
-//
-//    @RequestMapping("/test")
-//    public List<Semester> getGreeting() {
-//        return service.getTest();
-//    }
-//
-//
-//    @RequestMapping(method=RequestMethod.POST, value="/addTest/")
-//    public void addTest(@RequestBody Semester sem) {
-//        service.addTest(sem);
-//    }
-//
 
 
     @RequestMapping("/test")
@@ -47,6 +30,9 @@ public class CourseController {
         return service.getTest();
     }
 
+    /**
+     * Use a pathvariable to specify which semester array to insert the object into
+     */
     @RequestMapping(method=RequestMethod.POST, value="/addTest/{semester}")
     public List<Courses> addCourse(@PathVariable String semester, @RequestBody Courses courseObj) {
         List<Courses> course = new ArrayList<>();
@@ -55,14 +41,24 @@ public class CourseController {
         return course;
     }
 
+    /**
+     * Index by semester array into object
+     */
     @RequestMapping(method=RequestMethod.PUT, value="/editTest/{semester}/{id}")
     public Courses editTest(@PathVariable("semester") String semester, @PathVariable("id") String id, @RequestBody Courses course) {
         service.editTest(semester, id, course);
         return course;
     }
 
+    @RequestMapping(method=RequestMethod.DELETE, value="/delete/{semester}/{id}")
+    public void deleteTest(@PathVariable String semester, @PathVariable String id){
+        service.deleteTest(semester, id);
+    }
 
 
+    /**
+     * Mongodb tied controllers
+     */
     @RequestMapping(method=RequestMethod.POST, value="/add")
     public void addCourse(@RequestBody Courses course){
         service.addCourse(course);

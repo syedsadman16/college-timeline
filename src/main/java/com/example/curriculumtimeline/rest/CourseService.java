@@ -18,41 +18,19 @@ public class CourseService {
     @Autowired 
     private ClassesRepository classesRepository;
 
-
-//    List<Semester> semesterList = new ArrayList<>();
-//
-//    public void addTest(Semester sem){
-//        Semester course = new Semester();
-//
-//        semesterList.add(sem);
-//    }
-//
-//    public List<Semester> getTest() {
-//        return semesterList;
-//    }
-
-
-    /**  
-    * Hold an ArrayList of Map objects in the instance
-    * String determines the Semester within the JSON and List<Courses> allows
-    * it to hold multiple Course objects under a single Semster
-    */
-    //ArrayList<Map<String, List<Courses>>> course_list = new ArrayList<>();
-
-
-
     HashMap<String, List<Courses>> course_list = new HashMap<String, List<Courses>>();
 
-
-//    public void addTest(Map<String, List<Courses>> courses) {
-//        course_list.put(courses);
-//    }
 
     public Map<String, List<Courses>> getTest() {
         return course_list;
     }
 
-
+    /**
+     * Takes in the semester and the list of courses passed in
+     * Check the map to see if the course object under the semester
+     * actually exists. If yes, then append the course object, else
+     * insert it for the first time
+     */
     public void addTest(String semester, List<Courses> course) {
 
             if(course_list.containsKey(semester)) {
@@ -64,12 +42,14 @@ public class CourseService {
     }
 
     /**
-    * Get the correct semester array where course is located
-    * Use the ID to find the course and save new course object
+     * Semester and Id from path,Course object from json passed in
+     * First get the correct list from the hashmap with the semester array
+     * Iterate through the list and find the object that contains the key
+     * Update the contents of the existing object using the new object and
+     * finally save changed by replacing list with updated valie
     */
     public void editTest(String semester, String id, Courses courses) {
-        System.out.println("SEMESTER " + semester + " ID "+ id+ "\n");
-        System.out.println("COURSE " + courses);
+
         // Get entire course list under the semester - this should be saved
        List<Courses> updatedCourse = course_list.get(semester);
 
@@ -82,19 +62,14 @@ public class CourseService {
                 course_list.replace(semester, updatedCourse);
             }
         }
-       // int index = updatedCourse.indexOf(id);
-        // Update the object
-//        updatedCourse.get(index).replaceAll(courses.getSubject(),
-//                                 courses.getCourseNumber(), courses.getName(),
-//                                 courses.getCredits(), courses.getSemester());
-        // // Find the index containing this Id
-        // int size = updatedCourse.size();
-        // int index = IntStream.range(0, size)
-        // .filter(i -> updatedCourse.get(i).getID().equals(id))
-        // .findFirst().orElse(-1);
-        // updatedCourse.set(index, courses);
-        // Save changes to entire list
-       // course_list.replace(semester, updatedCourse);
+    }
+
+    /**
+     * Find the correct semester array in the map
+     * Use Java 8 array method to find and remove object with id
+     */
+    public void deleteTest(String semester, String id){
+        course_list.get(semester).removeIf(p->p.getID().equals(id));
     }
 
 
