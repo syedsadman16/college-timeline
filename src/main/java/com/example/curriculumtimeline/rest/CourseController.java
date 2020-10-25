@@ -14,33 +14,58 @@ import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping("/api")
 @RestController
 public class CourseController {
 
-    @Autowired // Spring marks it as an injection of dependencies
-    private CourseService service; // Creates an instance of the service
-    
-    @RequestMapping("/")
-    public List<Courses> getCourses(){
-        return service.viewAllCourses();
-    } 
+    /*
+    * Marked as an injection of dependencies for the classpath
+    */
+    @Autowired
+    private CourseService service;
+//
+//    @RequestMapping("/")
+//    public List<Courses> getCourses(){
+//        return service.viewAllCourses();
+//    }
+//
+//    @RequestMapping("/test")
+//    public List<Semester> getGreeting() {
+//        return service.getTest();
+//    }
+//
+//
+//    @RequestMapping(method=RequestMethod.POST, value="/addTest/")
+//    public void addTest(@RequestBody Semester sem) {
+//        service.addTest(sem);
+//    }
+//
+
+
+    @RequestMapping("/test")
+    public Map<String, List<Courses>> getGreeting() {
+        return service.getTest();
+    }
+
+    @RequestMapping(method=RequestMethod.POST, value="/addTest/{semester}")
+    public List<Courses> addCourse(@PathVariable String semester, @RequestBody Courses courseObj) {
+        List<Courses> course = new ArrayList<>();
+        course.add(courseObj);
+        service.addTest(semester, course);
+        return course;
+    }
+
+    @RequestMapping(method=RequestMethod.PUT, value="/editTest/{semester}/{id}")
+    public Courses editTest(@PathVariable("semester") String semester, @PathVariable("id") String id, @RequestBody Courses course) {
+        service.editTest(semester, id, course);
+        return course;
+    }
+
+
 
     @RequestMapping(method=RequestMethod.POST, value="/add")
     public void addCourse(@RequestBody Courses course){
         service.addCourse(course);
-    }
-
-    @RequestMapping("/test")
-    public ArrayList<Map<String, List<Courses>>> getGreeting() {
-        return service.getTest();
-    } 
-
-    @RequestMapping(method=RequestMethod.POST, value="/addTest")
-    public Map<String, List<Courses>> addCourse(@RequestBody Map<String, List<Courses>> course) {
-      //  HashMap<String, List<Courses>> finalMap = new HashMap<>();
-       // finalMap.put(course.get(0).getSemester(), course.get(course));
-        service.addTest(course);
-        return course;
     }
 
     @RequestMapping(method=RequestMethod.PUT, value="/edit/{id}")

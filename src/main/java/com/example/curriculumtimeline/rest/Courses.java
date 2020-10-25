@@ -8,6 +8,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Courses {
 
+    /*
+    * These fields are defined in the rest RequestBody
+    * When writing JSON, delcare these vaiables or it will be left null
+    * The ID is annotated with the Id tag
+    */
     @Id
     private String ID;
     private String subject;
@@ -26,6 +31,14 @@ public class Courses {
         this.name = name;
         this.credits = cr;
         this.semester = sem;
+    }
+
+    public void replaceAll(String sub, int num, String named, int cr, String sem){
+       subject = sub;
+       courseNumber = num;
+        name = named;
+        credits = cr;
+        semester = sem;
     }
 
     public String getSubject() {
