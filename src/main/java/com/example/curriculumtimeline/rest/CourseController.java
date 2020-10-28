@@ -25,45 +25,51 @@ public class CourseController {
     private CourseService service;
 
 
-    @RequestMapping("/test")
-    public List<Semester> getGreeting() {
-        return service.getTest();
+    @RequestMapping("/getCourses")
+    public List<Semester> getCourses() {
+        return service.getCourses();
     }
 
     /**
      * Use a pathvariable to specify which semester array to insert the object into
      */
-    @RequestMapping(method=RequestMethod.POST, value="/addTest/{semester}")
+    @RequestMapping(method=RequestMethod.POST, value="/addCourses/{semester}")
     public List<Courses> addCourse(@PathVariable String semester, @RequestBody Courses courseObj) {
         List<Courses> course = new ArrayList<>();
         course.add(courseObj);
-        service.addTest(semester, course);
+        service.addCourses(semester, course);
         return course;
     }
 
     /**
      * Index by semester array into object
      */
-    @RequestMapping(method=RequestMethod.PUT, value="/editTest/{semester}/{id}")
-    public Courses editTest(@PathVariable("semester") String semester, @PathVariable("id") String id, @RequestBody Courses course) {
-        service.editTest(semester, id, course);
+    @RequestMapping(method=RequestMethod.POST, value="/editCourses/{semester}/{id}")
+    public Courses editCourses(@PathVariable String semester, @PathVariable String id, @RequestBody Courses course) {
+        service.editCourses(semester, id, course);
         return course;
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/delete/{semester}/{id}")
-    public void deleteTest(@PathVariable String semester, @PathVariable int id){
-        service.deleteTest(semester, id);
+    /*
+     * Delete entire object within a semester usign the id
+     */
+    @RequestMapping(method=RequestMethod.DELETE, value="/deleteCourses/{semester}/{id}")
+    public void deleteCourses(@PathVariable String semester, @PathVariable String id){
+        service.deleteCourses(semester, id);
     }
 
+    /*
+     * Search for specific object within the array and return it
+     */
     @RequestMapping(method=RequestMethod.GET, value="/search")
-    public List<Semester> search(){
-        return service.seachQuery();
+    public List<Semester> search(@PathVariable String semester, @PathVariable String id){
+        return service.seachQuery(semester, id);
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/setQ")
-    public void setQuery(){
-         service.setQuery();
-    }
+//    @RequestMapping(method=RequestMethod.POST, value="/setQ")
+//    public void setQuery(){
+//         service.setQuery();
+//    }
 
 
 }

@@ -7,8 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * This class will be pushed to MongoDB
+ * Contains ID to index and update to the first object
+ * Contains HashMap to get specified JSON structure
+ */
+
 @Document
 public class Semester {
+
 
     @Id
     String id;

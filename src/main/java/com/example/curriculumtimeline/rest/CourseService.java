@@ -25,7 +25,7 @@ public class CourseService {
     /*
      * Returns the Map stored inside the database
      */
-    public  List<Semester> getTest() {
+    public  List<Semester> getCourses() {
        return classesRepository.findAll();
    }
 
@@ -35,7 +35,7 @@ public class CourseService {
      * actually exists. If yes, then append the course object, else
      * insert it for the first time
      */
-    public void addTest(String semester, List<Courses> course) {
+    public void addCourses(String semester, List<Courses> course) {
 
         if(container.course_list.containsKey(semester)) {
             container.course_list.get(semester).addAll(course);
@@ -55,12 +55,12 @@ public class CourseService {
      * Update the contents of the existing object using the new object and
      * finally save changed by replacing list with updated valie
     */
-    public void editTest(String semester, String id, Courses courses) {
+    public void editCourses(String semester, String id, Courses courses) {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("course_list."+semester+"._id").is(id));
         Update update = new Update();
-        update.set("course_list."+semester+".$", courses);
+        update.set("course_list."+semester+".$",courses);
         mongoTemplate.updateMulti(query, update, Semester.class);
 
     }
@@ -69,7 +69,7 @@ public class CourseService {
      * Find the correct semester array in the map
      * Use Java 8 array method to find and remove object with id
      */
-    public void deleteTest(String semester, int id){
+    public void deleteCourses(String semester, String id){
 
         Query query = new Query();
         query.addCriteria(Criteria.where("course_list."+semester+"._id").is(id));
@@ -97,6 +97,6 @@ public class CourseService {
 //    }
 
 
- 
+
 
 }
