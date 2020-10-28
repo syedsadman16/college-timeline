@@ -1,12 +1,12 @@
 package com.example.curriculumtimeline.rest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.IntStream;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 /**  
@@ -17,13 +17,17 @@ public class CourseService {
 
     @Autowired 
     private ClassesRepository classesRepository;
+    @Autowired
+    MongoTemplate mongoTemplate;
 
-    HashMap<String, List<Courses>> course_list = new HashMap<String, List<Courses>>();
+    Semester container = new Semester();
+    //HashMap<String, List<Courses>> course_list = new HashMap<String, List<Courses>>();
+    //MongoOperations mongoOps = new MongoTemplate(new SimpleMongoClientDbFactory(MongoClients.create(), "<dbname>"));
 
 
-    public Map<String, List<Courses>> getTest() {
-        return course_list;
-    }
+    public  List<Semester> getTest() {
+       return classesRepository.findAll();
+   }
 
     /**
      * Takes in the semester and the list of courses passed in
@@ -33,12 +37,16 @@ public class CourseService {
      */
     public void addTest(String semester, List<Courses> course) {
 
-            if(course_list.containsKey(semester)) {
-                course_list.get(semester).addAll(course);
-            } else {
-                course_list.put(semester, course);
-            }
+        if(container.course_list.containsKey(semester)) {
+            container.course_list.get(semester).addAll(course);
+        } else {
+            container.course_list.put(semester, course);
+        }
 
+        // Insert into single collection instead of creating new objects in db
+        container.id = "semester";
+        container.test = "remove_me";
+        classesRepository.save(container);
     }
 
     /**
@@ -51,7 +59,7 @@ public class CourseService {
     public void editTest(String semester, String id, Courses courses) {
 
         // Get entire course list under the semester - this should be saved
-       List<Courses> updatedCourse = course_list.get(semester);
+       List<Courses> updatedCourse = container.course_list.get(semester);
 
         // Find object within list
         for(int i=0; i<updatedCourse.size(); i++){
@@ -59,7 +67,7 @@ public class CourseService {
                 updatedCourse.get(i).replaceAll(courses.getSubject(),
                                 courses.getCourseNumber(), courses.getName(),
                                 courses.getCredits(), courses.getSemester());
-                course_list.replace(semester, updatedCourse);
+                container.course_list.replace(semester, updatedCourse);
             }
         }
     }
@@ -68,33 +76,103 @@ public class CourseService {
      * Find the correct semester array in the map
      * Use Java 8 array method to find and remove object with id
      */
-    public void deleteTest(String semester, String id){
-        course_list.get(semester).removeIf(p->p.getID().equals(id));
+    public void deleteTest(String semester, int id){
+        //container.course_list.get(semester).removeIf(p->p.getID().equals(id));
+//        String object = "course_list."+semester+".id";
+////
+//       MongoOperations mongoTemplate = new MongoTemplate(MongoClients.create(), "database");
+//
+        Query query = new Query();
+        query.addCriteria(Criteria.where("course_list.Spring2022._id").is("CS332"));
+        //query.fields().include("course_list.Spring2022.$");
+        Update update = new Update();
+        update.unset("course_list.Spring2022.$");
+
+// run update operation
+        mongoTemplate.updateMulti(query, update, Semester.class);
+        System.out.println("UPDATE OBJ: " + query.toString());
+
+
+       // Query removeQuery = Query.query(Criteria.where("innerDocs.name").in(ids));
+
+
+
+//        mongoTemplate.updateMulti(new Query(),
+//                new Update().pull("course_list.Spring2021", Query.query(Criteria.where("courseNumber").is(30600))), "semester");
+//
+//        List<String> ids = Arrays.asList("innerDoc22", "innerDoc21");
+//        Query removeQuery = Query.query(Criteria.where("innerDocs.name").in(ids));
+//
+//        WriteResult wc =
+//                mongoTemplate.upsert(removeQuery,
+//                        new Update().pull("innerDocs",
+//                                new InnerDocument("innerDoc22", null)),
+//                        OutterObject.class);
+//
+//        System.out.println(wc.getLastError());
+
+
+//        Query query = new Query();
+//
+//        query.addCriteria(Criteria.where("id").is("semester"));
+//
+//
+//        Update update = new Update();
+//        update.unset("course_list.Spring2021.$.id");
+//
+//        mongoTemplate.updateMulti(query, update, Semester.class);
+        
+
+// run update operation
+
+
+//        Update updateObj = new Update()
+//                .pull("course_list.Spring2021", new BasicDBObject("courseNumber", 30600));
+
+        //System.out.println("UPDATE OBJ: " + updateObj.toString());
+
     }
 
+    public List<Semester> seachQuery(){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("course_list.Spring2022._id").is("CS332"));
+       // query.fields().include("course_list.Spring2022.$");
+        return mongoTemplate.find(query, Semester.class);
+    }
+
+    public void setQuery(){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("course_list.Spring2022._id").is("CS332"));
+        Update update = new Update();
+        update.set("course_list.Spring2022.$.courseNumber",456);
+
+// run update operation
+        mongoTemplate.updateMulti(query, update, Semester.class);
+
+    }
 
 
     /**  
     * Older methods for previous rest design
     */
-
-    public List<Courses> viewAllCourses(){
-        return classesRepository.findAll();
-    }
-
-    public void addCourse(Courses course){
-        classesRepository.save(course);
-    }
-
-    public void edit(Courses course, String id){
-        Courses updateCourse = classesRepository.findById(id).orElseThrow();
-        updateCourse = course;
-        classesRepository.save(updateCourse);
-    }
-
-    public void delete(Courses course, String id){
-        Courses deleteCourse = classesRepository.findById(id).orElseThrow();
-        classesRepository.delete(deleteCourse);
-    }
+//
+//    public List<Courses> viewAllCourses(){
+//        return classesRepository.findAll();
+//    }
+//
+//    public void addCourse(Courses course){
+//        classesRepository.save(course);
+//    }
+//
+//    public void edit(Courses course, String id){
+//        Courses updateCourse = classesRepository.findById(id).orElseThrow();
+//        updateCourse = course;
+//        classesRepository.save(updateCourse);
+//    }
+//
+//    public void delete(Courses course, String id){
+//        Courses deleteCourse = classesRepository.findById(id).orElseThrow();
+//        classesRepository.delete(deleteCourse);
+//    }
 
 }

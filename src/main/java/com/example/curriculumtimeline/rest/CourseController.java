@@ -26,7 +26,7 @@ public class CourseController {
 
 
     @RequestMapping("/test")
-    public Map<String, List<Courses>> getGreeting() {
+    public List<Semester> getGreeting() {
         return service.getTest();
     }
 
@@ -51,26 +51,35 @@ public class CourseController {
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/delete/{semester}/{id}")
-    public void deleteTest(@PathVariable String semester, @PathVariable String id){
+    public void deleteTest(@PathVariable String semester, @PathVariable int id){
         service.deleteTest(semester, id);
     }
 
+    @RequestMapping(method=RequestMethod.GET, value="/search")
+    public List<Semester> search(){
+        return service.seachQuery();
+    }
+
+    @RequestMapping(method=RequestMethod.POST, value="/setQ")
+    public void setQuery(){
+         service.setQuery();
+    }
 
     /**
      * Mongodb tied controllers
      */
-    @RequestMapping(method=RequestMethod.POST, value="/add")
-    public void addCourse(@RequestBody Courses course){
-        service.addCourse(course);
-    }
-
-    @RequestMapping(method=RequestMethod.PUT, value="/edit/{id}")
-    public void editCourse(@RequestBody Courses course, @PathVariable String id){
-        service.edit(course, id);
-    }
-
-    @RequestMapping(method=RequestMethod.DELETE, value="/delete/{id}")
-    public void deleteCourse(@RequestBody Courses course, @PathVariable String id){
-        service.delete(course, id);
-    }
+//    @RequestMapping(method=RequestMethod.POST, value="/add")
+//    public void addCourse(@RequestBody Courses course){
+//        service.addCourse(course);
+//    }
+//
+//    @RequestMapping(method=RequestMethod.PUT, value="/edit/{id}")
+//    public void editCourse(@RequestBody Courses course, @PathVariable String id){
+//        service.edit(course, id);
+//    }
+//
+//    @RequestMapping(method=RequestMethod.DELETE, value="/delete/{id}")
+//    public void deleteCourse(@RequestBody Courses course, @PathVariable String id){
+//        service.delete(course, id);
+//    }
 }
