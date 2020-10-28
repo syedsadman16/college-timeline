@@ -65,21 +65,5 @@ public class CourseController {
          service.setQuery();
     }
 
-    /**
-     * Mongodb tied controllers
-     */
-//    @RequestMapping(method=RequestMethod.POST, value="/add")
-//    public void addCourse(@RequestBody Courses course){
-//        service.addCourse(course);
-//    }
-//
-//    @RequestMapping(method=RequestMethod.PUT, value="/edit/{id}")
-//    public void editCourse(@RequestBody Courses course, @PathVariable String id){
-//        service.edit(course, id);
-//    }
-//
-//    @RequestMapping(method=RequestMethod.DELETE, value="/delete/{id}")
-//    public void deleteCourse(@RequestBody Courses course, @PathVariable String id){
-//        service.delete(course, id);
-//    }
+
 }
