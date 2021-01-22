@@ -20,7 +20,7 @@ public class Semester {
     @Id
     String id;
     String test;
-    Map<String, List<Courses>> course_list = new HashMap<String, List<Courses>>();;
+    Map<String, List<Courses>> course_list = new HashMap<String, List<Courses>>();
 
     public String getTest() {
         return test;

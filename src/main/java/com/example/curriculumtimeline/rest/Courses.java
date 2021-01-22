@@ -20,10 +20,13 @@ public class Courses {
     private String name;
     private int credits;
     private String semester;
+    private String color;
+    private String description;
+
 
     public Courses() { }
 
-    public Courses(String id, String sub, int num, String name, int cr, String sem){
+    public Courses(String id, String sub, int num, String name, int cr, String sem, String color, String description){
         super();
         this.subject = sub;
         this.ID = id;
@@ -31,6 +34,8 @@ public class Courses {
         this.name = name;
         this.credits = cr;
         this.semester = sem;
+        this.color = color;
+        this.description = description;
     }
 
     public void replaceAll(String sub, int num, String named, int cr, String sem){
@@ -39,6 +44,22 @@ public class Courses {
         name = named;
         credits = cr;
         semester = sem;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getSubject() {

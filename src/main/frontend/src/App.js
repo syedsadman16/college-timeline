@@ -17,17 +17,36 @@ function App() {
   const [courseNumber, setCourseNumber] = useState("");
   const [courseName, setCourseName] = useState("");
   const [credits, setCredits] = useState("");
+  const [semesters, setSemesters] = useState([]);
+  const [json, setJson] = useState([]);
 
+
+  const url = 'http://localhost:8080/api/getCourses';
   useEffect( () => {
-    const url = 'http://localhost:8080';
-    axios.get(url).then( (res) => {
-      console.log(res.data);
-    })
-  }, []);
+
+    async function getCourses() {
+      const data = await axios.get(url);
+      //console.log("Date.date" , JSON.stringify(data.data[0].course_list));
+      setJson(data.data[0].course_list); // contains object of arrays
+ 
+      let semesterData = data.data[0].course_list;
+      for (let i in data.data[0].course_list){
+        semesters.push(semesterData[i]); // All the arraays and items
+      }
+
+      return data;
+    }
+
+    getCourses();
+
+  }, [url]);
+
+
 
   function submitForm(){
     console.log(cardColor, courseName, courseNumber, credits);
   }
+
 
   return (
     <div className="App">
@@ -35,14 +54,17 @@ function App() {
       <button onClick={() => {
           setOpenStatus(true);
           console.log(open);
+          // getCoursesList();
         }}>
         Open modal
       </button>
+
 
       <h1>
         {" "} The City College of New York '21
         <br /> 
         <i>B.E. Computer Engineering</i> {" "}
+        
       </h1>
 
       <div>
@@ -84,36 +106,35 @@ function App() {
         </Modal>
       </div>
 
+
       <VerticalTimeline>
-        <VerticalTimelineElement
-          className="vertical-timeline-element--work"
-          contentStyle={{ background: "lightgrey", color: "#fff" }}
-          contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
-          date="2011 - 2010"
-          iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}>
+        {Object.entries(json).map(([keys,sem]) => (
 
-          <Element name="Software Engineering" section="CSC322" color="red" />
-          <Element
-            name="Operating Systems"
-            section="CSC332"
-            color={cardColor}
-          />
-          <Element
-            name="Company Software Engineering"
-            section="Internship"
-            color="green"
-          />
-        </VerticalTimelineElement>
+          <VerticalTimelineElement
+            className="vertical-timeline-element--work"
+            contentStyle={{ background: "lightgrey", color: "#fff" }}
+            contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
+            date={keys}
+            iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}>
 
-        <VerticalTimelineElement
-          className="vertical-timeline-element--work"
-          contentStyle={{ background: "lightgrey", color: "#fff" }}
-          date="2010 - 2011"
-          iconStyle={{ background: "rgb(33, 150, 243)", color: "#ff0000" }}>
-          <Element name="Electromagnetics" section="EE330" />
-        </VerticalTimelineElement>
+            {sem.map( (data) => {
+              if (data != null) 
+              return (
+                <Element
+                name={data.name}
+                section={data.id}
+                color={data.color}
+                credits={data.credits}
+                description={data.description}
+                subject={data.subject}
+                />)
+            })}
+          </VerticalTimelineElement>
 
+        ))}
       </VerticalTimeline>
+
+
     </div>
   );
 }
